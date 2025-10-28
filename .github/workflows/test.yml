@@ -5,14 +5,20 @@ on:
     branches: [ main ]
   pull_request:
     branches: [ main ]
+  workflow_dispatch:   # ✅ allows manual trigger from GitHub UI
 
 jobs:
   test:
     runs-on: ubuntu-latest
 
     steps:
+      # 1️⃣ Checkout the repository
       - uses: actions/checkout@v4
+
+      # 2️⃣ Build the Docker image using your dev Dockerfile
       - name: Build Docker image
         run: docker build -t mydocker/docker-react -f Dockerfile.dev .
+
+      # 3️⃣ Run tests inside the Docker container
       - name: Run tests
         run: docker run -e CI=true mydocker/docker-react npm run test
